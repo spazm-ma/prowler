@@ -11,7 +11,7 @@ Installing Prowler with Terraform is simple and can be completed in under 1 minu
 - Start AWS CloudShell
 - Run the following commands to install Terraform and clone the Prowler git repo
   ```
-  git clone https://github.com/singergs/prowler.git
+  git clone https://github.com/prowler/prowler.git
   git fetch
   cd prowler
   git checkout -t origin/terraform-kickstarter
@@ -26,12 +26,12 @@ Installing Prowler with Terraform is simple and can be completed in under 1 minu
 
   ![Prowler Install](https://prowler-docs.s3.amazonaws.com/Prowler-Terraform-Install.gif)
   
-   - It is likely an error will return related to the SecurityHub subscription.  This appears to be Terraform related and you can validate the configuration by navigating to the SecurityHub console.  Click Integreations and search for Prowler. Take noe of the green check where it says *Accepting findings*
+   - It is likely an error will return related to the SecurityHub subscription.  This appears to be Terraform related and you can validate the configuration by navigating to the SecurityHub console.  Click Integreations and search for Prowler. Take note of the green check where it says *Accepting findings*
   
   ![Prowler Subscription](https://prowler-docs.s3.amazonaws.com/Validate-Prowler-Subscription.gif)
 
 
-Thats it!  Install is now complete.  The resources included a Cloudwatch event that will trigger the AWS Codebuild to run daily at 00:00 GMT.  If you'd like to run an assessment after the deployment then simply navigate to the Codebuild console and start the job manually.
+Thats it!  Install is now complete.  The resources include a Cloudwatch event that will trigger the AWS Codebuild to run daily at 00:00 GMT.  If you'd like to run an assessment after the deployment then simply navigate to the Codebuild console and start the job manually.
 
 ## Terraform Resources
 
