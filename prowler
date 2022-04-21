@@ -106,6 +106,7 @@ USAGE:
       -B                  Custom output bucket, requires -M <mode> and it can work also with -o flag.
                             (i.e.: -M csv -B my-bucket or -M csv -B my-bucket/folder/)
       -D                  Same as -B but do not use the assumed role credentials to put objects to the bucket, instead uses the initial credentials.
+      -Q                  S3_OPTIONS appended to the s3 cp command used with -B or -D (e.g. --sse AES256)
       -F                  Custom output report name, if not specified will use default output/prowler-output-ACCOUNT_NUM-OUTPUT_DATE.format.
       -z                  Failed checks do not trigger exit code 3.
       -Z                  Specify one or multiple check ids separated by commas that will trigger exit code 3 if they fail. Unspecified checks will not trigger exit code 3. This will override "-z".
@@ -118,7 +119,7 @@ USAGE:
   exit
 }
 
-while getopts ":hlLkqp:r:c:C:g:f:m:M:E:x:enbVsSI:A:R:T:w:N:o:B:D:F:zZ:O:" OPTION; do
+while getopts ":hlLkqp:r:c:C:g:f:m:M:E:x:enbVsSI:A:R:T:w:N:o:B:D:F:Q:zZ:O:" OPTION; do
    case $OPTION in
      h )
         usage
@@ -215,6 +216,9 @@ while getopts ":hlLkqp:r:c:C:g:f:m:M:E:x:enbVsSI:A:R:T:w:N:o:B:D:F:zZ:O:" OPTION
      D )
         OUTPUT_BUCKET=$OPTARG
         OUTPUT_BUCKET_NOASSUME=1
+        ;;
+     Q )
+        export S3_OPTIONS=$OPTARG
         ;;
      F )
         OUTPUT_FILE_NAME=$OPTARG

@@ -31,27 +31,34 @@ if [[ $OUTPUT_BUCKET ]]; then
     echo "$OPTRED ERROR!$OPTNORMAL - Mode (-M) has to be set as well. Use -h for help."
     exit 1
   fi
+elif [ -n "$S3_OPTIONS" ]; then
+  echo "$OPTRED ERROR!$OPTNORMAL - Custom bucket (-B or -D) has to be set as well as S3_OPTIONS. Use -h for help."
+  exit 1
 fi
 
 copyToS3(){
   # Prowler will copy each format to its own folder in S3, that is for better handling
   # and processing by Quicksight or others.
+  echo "S3_OPTIONS: ${S3_OPTIONS}"
   if [[ $OUTPUT_BUCKET ]]; then
     if [[ "${MODES[@]}" =~ "csv" ]]; then
       $AWSCLI $PROFILE_OPT s3 cp $OUTPUT_DIR/prowler-output-${ACCOUNT_NUM}-${OUTPUT_DATE}.$EXTENSION_CSV \
-      s3://$OUTPUT_BUCKET/csv/ --acl bucket-owner-full-control
-    fi 
+      s3://$OUTPUT_BUCKET/csv/ --acl bucket-owner-full-control ${S3_OPTIONS}
+    fi
     if [[ "${MODES[@]}" =~ "html" ]]; then
+      $AWSCLI $PROFILE_OPT sts get-caller-identity
+      echo $AWSCLI $PROFILE_OPT s3 cp $OUTPUT_DIR/prowler-output-${ACCOUNT_NUM}-${OUTPUT_DATE}.$EXTENSION_HTML \
+      s3://$OUTPUT_BUCKET/html/ --acl bucket-owner-full-control ${S3_OPTIONS}
       $AWSCLI $PROFILE_OPT s3 cp $OUTPUT_DIR/prowler-output-${ACCOUNT_NUM}-${OUTPUT_DATE}.$EXTENSION_HTML \
-      s3://$OUTPUT_BUCKET/html/ --acl bucket-owner-full-control
-    fi 
+      s3://$OUTPUT_BUCKET/html/ --acl bucket-owner-full-control ${S3_OPTIONS}
+    fi
     if [[ "${MODES[@]}" =~ "json" ]]; then
       $AWSCLI $PROFILE_OPT s3 cp $OUTPUT_DIR/prowler-output-${ACCOUNT_NUM}-${OUTPUT_DATE}.$EXTENSION_JSON \
-      s3://$OUTPUT_BUCKET/json/ --acl bucket-owner-full-control
+      s3://$OUTPUT_BUCKET/json/ --acl bucket-owner-full-control ${S3_OPTIONS}
     fi
     if [[ "${MODES[@]}" =~ "json-asff" ]]; then
       $AWSCLI $PROFILE_OPT s3 cp $OUTPUT_DIR/prowler-output-${ACCOUNT_NUM}-${OUTPUT_DATE}.$EXTENSION_ASFF \
-      s3://$OUTPUT_BUCKET/json-asff/ --acl bucket-owner-full-control
+      s3://$OUTPUT_BUCKET/json-asff/ --acl bucket-owner-full-control ${S3_OPTIONS}
     fi
   fi
 }
