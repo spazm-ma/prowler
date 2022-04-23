@@ -34,10 +34,21 @@ xml_escape() {
 
 prepare_junit_output() {
   # Remove any JUnit output from previous runs
-  rm -rf "$JUNIT_OUTPUT_DIRECTORY"
-  mkdir "$JUNIT_OUTPUT_DIRECTORY"
+  if [[ -n "$ACCOUNT_TO_ASSUME" ]]; then
+    echo "Not deleting junit directory: ${JUNIT_OUTPUT_DIRECTORY}. Please clean up after yourself"
+  else
+    echo "Deleting junit directory: ${JUNIT_OUTPUT_DIRECTORY}."
+    echo rm -rf "${JUNIT_OUTPUT_DIRECTORY}"
+  fi
+  mkdir -p "$JUNIT_OUTPUT_DIRECTORY"
+
+  JUNIT_PATH="$JUNIT_OUTPUT_DIRECTORY"
+  if [[ ! "$JUNIT_PATH" =~ '^/' ]]; then
+      # make an absolute path
+      JUNIT_PATH="$(pwd)/${JUNIT_PATH}"
+  fi
   echo ""
-  echo "$NOTICE Writing JUnit XML reports to $PROWLER_DIR/$JUNIT_OUTPUT_DIRECTORY $NORMAL"
+  echo "$NOTICE Writing JUnit XML reports to $JUNIT_OUTPUT_DIRECTORY $NORMAL"
 }
 
 prepare_junit_check_output() {
